@@ -11,7 +11,7 @@ export function Footer() {
               <span className="font-serif text-lg text-primary-foreground">Visão Clara</span>
             </a>
             <p className="mt-4 text-sm text-primary-foreground/70 leading-relaxed">
-              Sua ótica de confiança em São Paulo. Cuidando da sua visão com
+              Sua ótica de confiança em Brotas. Cuidando da sua visão com
               excelência há mais de 15 anos.
             </p>
           </div>
