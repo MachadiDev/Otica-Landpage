@@ -1,5 +1,5 @@
 # ---- Etapa 1: Instalar dependencias ----
-FROM node:20-alpine@sha256:6c2e9e97fb8ec6da0c1a91a7c4a7de69d5d1e1a9b8c8d8e8f8g8h8i8j8k8l AS deps
+FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 
 # ---- Etapa 2: Build da aplicacao ----
-FROM node:20-alpine@sha256:6c2e9e97fb8ec6da0c1a91a7c4a7de69d5d1e1a9b8c8d8e8f8g8h8i8j8k8l AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -20,14 +20,13 @@ COPY . .
 RUN pnpm build
 
 # ---- Etapa 3: Imagem de producao ----
-FROM node:20-alpine@sha256:6c2e9e97fb8ec6da0c1a91a7c4a7de69d5d1e1a9b8c8d8e8f8g8h8i8j8k8l AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
